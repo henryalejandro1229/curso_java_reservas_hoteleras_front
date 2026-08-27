@@ -1,0 +1,29 @@
+<div class="modal-container">
+    <h2>{{ data.isEditar ? 'Editar Usuario' : 'Agregar Usuario' }}</h2>
+    <form [formGroup]="usuarioForm">
+        <mat-form-field appearance="fill" class="col-12 mb-3">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="username" [readonly]="data.isEditar" [value]="data.username" [disabled]="data.isEditar" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="col-12 mb-3">
+            <mat-label>Contraseña</mat-label>
+            <input matInput formControlName="password" type="password" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="col-12 mb-3">
+            <mat-label>Roles</mat-label>
+            <mat-select formControlName="roles" multiple required>
+                <mat-option value="ROLE_ADMIN">ADMINISTRADOR</mat-option>
+                <mat-option value="ROLE_USER">USUARIO</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="modal-actions">
+            <button mat-raised-button type="button" (click)="cerrarModal()">Cancelar</button>
+            <button mat-flat-button color="primary" (click)="guardarCambios()" [disabled]="usuarioForm.invalid">
+                {{ data.username ? 'Guardar Cambios' : 'Registrar Usuario' }}
+            </button>
+        </div>
+    </form>
+</div>
