@@ -131,9 +131,7 @@ export class ReservasComponent implements OnInit {
             );
             Swal.fire('Eliminada', 'La reserva fue eliminada correctamente.', 'success');
           },
-          error: () => {
-            Swal.fire('Error', 'No se pudo eliminar la reserva.', 'error');
-          }
+          error: () => undefined
         });
       }
     });
@@ -178,6 +176,66 @@ export class ReservasComponent implements OnInit {
     return reserva.nombreHabitacion || `Habitación #${reserva.idHabitacion}`;
   }
 
+  puedeCambiarA(reserva: ReservaResponse, idEstado: number): boolean {
+    const estado = this.getCodigoEstado(reserva);
+
+    return (estado === 1 && (idEstado === 2 || idEstado === 4)) ||
+      (estado === 2 && idEstado === 3);
+  }
+
+  cambiarEstadoReserva(reserva: ReservaResponse, idEstado: number, descripcion: string): void {
+    if (this.cargando || this.operacionEnCurso || this.modalAbierto || !this.puedeCambiarA(reserva, idEstado)) {
+      return;
+    }
+
+    const reservaId = String(reserva.id ?? reserva.idReserva);
+    Swal.fire({
+      title: `${descripcion} reserva`,
+      text: `¿Deseas marcar la reserva ${reservaId} como ${descripcion.toLowerCase()}?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.operacionEnCurso = true;
+        this.reservasService.actualizarEstadoReserva(reservaId, idEstado).pipe(
+          finalize(() => {
+            this.operacionEnCurso = false;
+          })
+        ).subscribe({
+          next: () => {
+            this.cargarReservas();
+            Swal.fire('Estado actualizado', `La reserva quedó ${descripcion.toLowerCase()}.`, 'success');
+          },
+          error: () => undefined
+        });
+      }
+    });
+  }
+
+  private getCodigoEstado(reserva: ReservaResponse): number {
+    const estado = (reserva.estadoReserva ?? '').toUpperCase();
+
+    if (estado.includes('CONFIRM')) {
+      return 1;
+    }
+
+    if (estado.includes('CURSO') || estado.includes('CHECK-IN')) {
+      return 2;
+    }
+
+    if (estado.includes('FINAL') || estado.includes('CHECK-OUT')) {
+      return 3;
+    }
+
+    if (estado.includes('CANCEL')) {
+      return 4;
+    }
+
+    return 1;
+  }
+
   private cargarReservas(): void {
     this.cargando = true;
     this.errorCarga = false;
@@ -208,9 +266,7 @@ export class ReservasComponent implements OnInit {
         this.cargarReservas();
         Swal.fire('Reserva registrada', 'La reserva se creó correctamente.', 'success');
       },
-      error: () => {
-        Swal.fire('Error', 'No se pudo registrar la reserva.', 'error');
-      }
+      error: () => undefined
     });
   }
 
@@ -226,9 +282,7 @@ export class ReservasComponent implements OnInit {
         this.cargarReservas();
         Swal.fire('Reserva actualizada', 'Los cambios se guardaron correctamente.', 'success');
       },
-      error: () => {
-        Swal.fire('Error', 'No se pudo actualizar la reserva.', 'error');
-      }
+      error: () => undefined
     });
   }
 

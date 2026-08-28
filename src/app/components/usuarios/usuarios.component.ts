@@ -60,9 +60,7 @@ export class UsuariosComponent implements OnInit {
             this.dataSource.data = this.dataSource.data.filter(user => user.username !== username);
             Swal.fire('Eliminado', `El usuario ${username} fue eliminado.`, 'success');
           },
-          error: () => {
-            Swal.fire('Error', 'No se pudo eliminar el usuario.', 'error');
-          }
+          error: () => undefined
         });
       }
     });
@@ -102,9 +100,7 @@ export class UsuariosComponent implements OnInit {
         this.cargarUsuarios();
         Swal.fire('Usuario registrado', 'El usuario se creó correctamente.', 'success');
       },
-      error: () => {
-        Swal.fire('Error', 'No se pudo registrar el usuario.', 'error');
-      }
+      error: () => undefined
     });
   }
 
@@ -114,9 +110,7 @@ export class UsuariosComponent implements OnInit {
         this.cargarUsuarios();
         Swal.fire('Usuario actualizado', 'Los cambios se guardaron correctamente.', 'success');
       },
-      error: () => {
-        Swal.fire('Error', 'No se pudo actualizar el usuario.', 'error');
-      }
+      error: () => undefined
     });
   }
 

@@ -35,12 +35,37 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Fecha de entrada</mat-label>
-          <input matInput type="date" formControlName="fechaEntrada" required />
+          <input
+            matInput
+            [matDatepicker]="pickerEntrada"
+            formControlName="fechaEntrada"
+            required
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="pickerEntrada"></mat-datepicker-toggle>
+          <mat-datepicker #pickerEntrada></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Fecha de salida</mat-label>
-          <input matInput type="date" formControlName="fechaSalida" required />
+          <input
+            matInput
+            [matDatepicker]="pickerSalida"
+            formControlName="fechaSalida"
+            [min]="reservaForm.value.fechaEntrada"
+            required
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="pickerSalida"></mat-datepicker-toggle>
+          <mat-datepicker #pickerSalida></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora de entrada</mat-label>
+          <input matInput type="time" formControlName="horaEntrada" step="60" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora de salida</mat-label>
+          <input matInput type="time" formControlName="horaSalida" step="60" required />
         </mat-form-field>
       </div>
 

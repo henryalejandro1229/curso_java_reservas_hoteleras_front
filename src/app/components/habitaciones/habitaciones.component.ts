@@ -9,6 +9,10 @@ import {
 } from '../../models/Habitacion.model';
 import { HabitacionesService } from '../../services/habitaciones.service';
 import { ModalHabitacionesComponent } from '../modals/modal-habitaciones/modal-habitaciones.component';
+import {
+  CLASES_ESTADO_HABITACION,
+  CLASE_ESTADO_HABITACION_DESCONOCIDO
+} from '../../constants/EstadosHabitacion';
 
 @Component({
   selector: 'app-habitaciones',
@@ -157,18 +161,8 @@ export class HabitacionesComponent implements OnInit {
   }
 
   getEstadoClase(habitacion: HabitacionResponse): string {
-    switch (habitacion.idEstadoHabitacion) {
-      case 1:
-        return 'estado-disponible';
-      case 2:
-        return 'estado-ocupada';
-      case 3:
-        return 'estado-limpieza';
-      case 4:
-        return 'estado-mantenimiento';
-      default:
-        return 'estado-desconocido';
-    }
+    return CLASES_ESTADO_HABITACION[habitacion.idEstadoHabitacion] ??
+      CLASE_ESTADO_HABITACION_DESCONOCIDO;
   }
 
   reintentarCarga(): void {

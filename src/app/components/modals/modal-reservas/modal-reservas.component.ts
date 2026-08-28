@@ -30,8 +30,10 @@ export class ModalReservasComponent implements OnInit {
     this.reservaForm = new FormGroup({
       idHuesped: new FormControl<number | null>(this.data.reserva?.idHuesped ?? null, [Validators.required]),
       idHabitacion: new FormControl<number | null>(this.data.reserva?.idHabitacion ?? null, [Validators.required]),
-      fechaEntrada: new FormControl(this.data.reserva?.fechaEntrada ?? '', [Validators.required]),
-      fechaSalida: new FormControl(this.data.reserva?.fechaSalida ?? '', [Validators.required])
+      fechaEntrada: new FormControl<Date | null>(this.parseFecha(this.data.reserva?.fechaEntrada), [Validators.required]),
+      fechaSalida: new FormControl<Date | null>(this.parseFecha(this.data.reserva?.fechaSalida), [Validators.required]),
+      horaEntrada: new FormControl(this.parseHora(this.data.reserva?.fechaEntrada), [Validators.required]),
+      horaSalida: new FormControl(this.parseHora(this.data.reserva?.fechaSalida), [Validators.required])
     });
   }
 
@@ -53,8 +55,8 @@ export class ModalReservasComponent implements OnInit {
     const reserva: ReservaRequest = {
       idHuesped: this.reservaForm.value.idHuesped,
       idHabitacion: this.reservaForm.value.idHabitacion,
-      fechaEntrada: this.reservaForm.value.fechaEntrada,
-      fechaSalida: this.reservaForm.value.fechaSalida
+      fechaEntrada: this.formatFechaHora(this.reservaForm.value.fechaEntrada, this.reservaForm.value.horaEntrada),
+      fechaSalida: this.formatFechaHora(this.reservaForm.value.fechaSalida, this.reservaForm.value.horaSalida)
     };
 
     this.dialogRef.close(reserva);
@@ -80,11 +82,58 @@ export class ModalReservasComponent implements OnInit {
       return false;
     }
 
-    return new Date(fechaSalida).getTime() < new Date(fechaEntrada).getTime();
+    const entrada = this.combinarFechaHora(fechaEntrada, this.reservaForm.value.horaEntrada);
+    const salida = this.combinarFechaHora(fechaSalida, this.reservaForm.value.horaSalida);
+    return salida.getTime() < entrada.getTime();
   }
 
   getNombreHuesped(huesped: HuespedResponse): string {
     return `${huesped.nombre} ${huesped.apellidoPaterno} ${huesped.apellidoMaterno}`.trim();
+  }
+
+  private parseFecha(fecha: string | undefined): Date | null {
+    if (!fecha) {
+      return null;
+    }
+
+    const fechaParte = fecha.substring(0, 10);
+    const partes = fechaParte.includes('/')
+      ? fechaParte.split('/').map(Number)
+      : fechaParte.split('-').map(Number).reverse();
+    const [day, month, year] = fechaParte.includes('/')
+      ? partes
+      : [partes[0], partes[1], partes[2]];
+    const resultado = new Date(year, month - 1, day);
+    const hora = this.parseHora(fecha);
+
+    if (hora) {
+      const [hours, minutes] = hora.split(':').map(Number);
+      resultado.setHours(hours, minutes, 0, 0);
+    }
+
+    return resultado;
+  }
+
+  private parseHora(fecha: string | undefined): string {
+    return fecha?.substring(11, 16) || '00:00';
+  }
+
+  private combinarFechaHora(fecha: Date, hora: string | undefined): Date {
+    const [hours, minutes] = (hora || '00:00').split(':').map(Number);
+    const resultado = new Date(fecha);
+    resultado.setHours(hours, minutes, 0, 0);
+    return resultado;
+  }
+
+  private formatFechaHora(fecha: Date | null | undefined, hora: string | undefined): string {
+    if (!fecha || !hora) {
+      return '';
+    }
+
+    const year = fecha.getFullYear();
+    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+    const day = String(fecha.getDate()).padStart(2, '0');
+    return `${day}/${month}/${year} ${hora}`;
   }
 
 }
