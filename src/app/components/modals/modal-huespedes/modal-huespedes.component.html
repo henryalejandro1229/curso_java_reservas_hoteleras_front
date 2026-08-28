@@ -1,0 +1,53 @@
+<div class="modal-container">
+  <h2>{{ data.isEditar ? 'Editar Huésped' : 'Agregar Huésped' }}</h2>
+  <form [formGroup]="huespedForm">
+    <mat-form-field appearance="fill" class="col-12 mb-3">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" required>
+      <mat-error>{{ getErrorMessage('nombre') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-12 mb-3">
+      <mat-label>Apellido paterno</mat-label>
+      <input matInput formControlName="apellidoPaterno" required>
+      <mat-error>{{ getErrorMessage('apellidoPaterno') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-12 mb-3">
+      <mat-label>Apellido materno</mat-label>
+      <input matInput formControlName="apellidoMaterno" required>
+      <mat-error>{{ getErrorMessage('apellidoMaterno') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-12 mb-3">
+      <mat-label>Nacionalidad</mat-label>
+      <input matInput formControlName="nacionalidad" required>
+      <mat-error>{{ getErrorMessage('nacionalidad') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-12 mb-3">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" required>
+      <mat-error>{{ getErrorMessage('email') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-12 mb-3">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="telefono" maxlength="10" required>
+      <mat-error>{{ getErrorMessage('telefono') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-12 mb-3">
+      <mat-label>Documento</mat-label>
+      <input matInput formControlName="documento" required>
+      <mat-error>{{ getErrorMessage('documento') }}</mat-error>
+    </mat-form-field>
+
+    <div class="modal-actions">
+      <button mat-raised-button type="button" (click)="cerrarModal()">Cancelar</button>
+      <button mat-flat-button color="primary" type="button" (click)="guardarCambios()" [disabled]="huespedForm.invalid">
+        {{ data.isEditar ? 'Guardar Cambios' : 'Registrar Huésped' }}
+      </button>
+    </div>
+  </form>
+</div>

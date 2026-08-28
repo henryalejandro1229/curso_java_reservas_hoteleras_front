@@ -25,6 +25,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { MatChipsModule } from '@angular/material/chips';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { HuepedesComponent } from './components/huepedes/huepedes.component';
+import { ModalHuespedesComponent } from './components/modals/modal-huespedes/modal-huespedes.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
     FooterComponent,
     NavbarComponent,
     UsuariosComponent,
-    ModalUsuarioComponent
+    ModalUsuarioComponent,
+    HuepedesComponent,
+    ModalHuespedesComponent
   ],
   imports: [
     HttpClientModule,
