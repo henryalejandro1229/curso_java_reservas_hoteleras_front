@@ -11,7 +11,18 @@
     </div>
 
     <div class="tabla-wrapper">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 usuarios-table">
+      <mat-progress-bar
+        *ngIf="cargando"
+        class="tabla-loader"
+        mode="indeterminate"
+        aria-label="Cargando usuarios">
+      </mat-progress-bar>
+
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        [attr.aria-busy]="cargando"
+        class="mat-elevation-z2 usuarios-table">
 
         <ng-container matColumnDef="no">
           <th mat-header-cell *matHeaderCellDef>No.</th>

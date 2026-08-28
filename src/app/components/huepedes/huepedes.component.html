@@ -10,7 +10,14 @@
       </div>
     </div>
 
-    <div class="tabla-wrapper">
+    <div class="tabla-wrapper" [attr.aria-busy]="cargando">
+      <mat-progress-bar
+        *ngIf="cargando"
+        class="tabla-loader"
+        mode="indeterminate"
+        aria-label="Cargando huéspedes">
+      </mat-progress-bar>
+
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 usuarios-table">
 
         <ng-container matColumnDef="no">

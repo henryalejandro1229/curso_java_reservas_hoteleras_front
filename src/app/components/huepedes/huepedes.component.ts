@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { finalize } from 'rxjs';
 import Swal from 'sweetalert2';
 import { HuespedRequest, HuespedResponse } from '../../models/Huesped.model';
 import { HuepedesService } from '../../services/huepedes.service';
@@ -15,6 +16,7 @@ import { ModalHuespedesComponent } from '../modals/modal-huespedes/modal-huesped
 export class HuepedesComponent implements OnInit {
 
   huespedes: HuespedResponse[] = [];
+  cargando = false;
 
   displayedColumns: string[] = [
     'no',
@@ -100,10 +102,14 @@ export class HuepedesComponent implements OnInit {
   }
 
   private cargarHuespedes(): void {
-    this.huepedesService.getHuespedes().subscribe(huespedes => {
-      this.huespedes = huespedes;
-      this.dataSource.data = huespedes;
-    });
+    this.cargando = true;
+
+    this.huepedesService.getHuespedes()
+      .pipe(finalize(() => this.cargando = false))
+      .subscribe(huespedes => {
+        this.huespedes = huespedes;
+        this.dataSource.data = huespedes;
+      });
   }
 
   private crearHuesped(huesped: HuespedRequest): void {
