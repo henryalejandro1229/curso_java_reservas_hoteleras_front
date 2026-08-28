@@ -38,23 +38,23 @@
           ></mat-progress-bar>
           <span>Cargando habitaciones…</span>
         </div>
-      } @else {
-        @if (errorCarga) {
-          <div class="estado-error" role="alert">
-            <span>No se pudieron cargar las habitaciones.</span>
-            <button mat-stroked-button type="button" (click)="reintentarCarga()">
-              Reintentar
-            </button>
-          </div>
-        }
+      }
 
-        @if (!errorCarga || dataSource.data.length > 0) {
-          <table
-            mat-table
-            [dataSource]="dataSource"
-            class="mat-elevation-z2 habitaciones-table"
-            aria-label="Listado de habitaciones"
-          >
+      @if (errorCarga) {
+        <div class="estado-error" role="alert">
+          <span>No se pudieron cargar las habitaciones.</span>
+          <button mat-stroked-button type="button" (click)="reintentarCarga()">
+            Reintentar
+          </button>
+        </div>
+      }
+
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z2 habitaciones-table"
+        aria-label="Listado de habitaciones"
+      >
           <caption class="solo-lectores">
             Habitaciones activas ordenadas por número. El estado es informativo.
           </caption>
@@ -147,9 +147,7 @@
               No hay habitaciones registradas.
             </td>
           </tr>
-          </table>
-        }
-      }
+      </table>
     </div>
   </mat-card>
 </section>

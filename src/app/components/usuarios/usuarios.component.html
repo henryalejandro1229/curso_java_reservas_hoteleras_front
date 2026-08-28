@@ -1,14 +1,16 @@
-<div class="usuarios-page">
+<section class="usuarios-page" aria-labelledby="usuarios-title">
   <mat-card class="usuarios-card">
-    <div class="usuarios-header">
+    <header class="usuarios-header">
       <div>
-        <h2>Usuarios</h2>
-        <button mat-flat-button color="primary" (click)="agregarUsuario()">
-          <mat-icon>add</mat-icon>
-          Agregar Usuario
-        </button>
+        <h1 id="usuarios-title">Usuarios</h1>
+        <p>Administra las cuentas con acceso al sistema.</p>
       </div>
-    </div>
+
+      <button mat-flat-button color="primary" type="button" (click)="agregarUsuario()">
+        <mat-icon aria-hidden="true">add</mat-icon>
+        Agregar usuario
+      </button>
+    </header>
 
     <div class="tabla-wrapper">
       <mat-progress-bar
@@ -23,19 +25,22 @@
         [dataSource]="dataSource"
         [attr.aria-busy]="cargando"
         class="mat-elevation-z2 usuarios-table">
+        <caption class="solo-lectores">
+          Usuarios del sistema y sus roles asignados.
+        </caption>
 
         <ng-container matColumnDef="no">
-          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <th mat-header-cell *matHeaderCellDef scope="col">No.</th>
           <td mat-cell *matCellDef="let user; let i = index">{{ i + 1 }}</td>
         </ng-container>
 
         <ng-container matColumnDef="username">
-          <th mat-header-cell *matHeaderCellDef>Usuario</th>
+          <th mat-header-cell *matHeaderCellDef scope="col">Usuario</th>
           <td mat-cell *matCellDef="let user">{{ user.username }}</td>
         </ng-container>
 
         <ng-container matColumnDef="roles">
-          <th mat-header-cell *matHeaderCellDef>Roles</th>
+          <th mat-header-cell *matHeaderCellDef scope="col">Roles</th>
           <td mat-cell *matCellDef="let user">
             <mat-chip-set>
               <mat-chip *ngFor="let role of user.roles" color="primary" selected>{{ getRoleName(role) }}</mat-chip>
@@ -44,7 +49,7 @@
         </ng-container>
 
         <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <th mat-header-cell *matHeaderCellDef scope="col">Acciones</th>
           <td mat-cell *matCellDef="let user">
             <button mat-icon-button color="primary" (click)="editarUsuario(user)">
               <mat-icon>edit</mat-icon>
@@ -57,7 +62,13 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row fila-vacia" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+            No hay usuarios registrados.
+          </td>
+        </tr>
       </table>
     </div>
   </mat-card>
-</div>
+</section>
