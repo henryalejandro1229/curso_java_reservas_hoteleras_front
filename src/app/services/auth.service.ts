@@ -1,0 +1,81 @@
+import { HttpClient } from "@angular/common/http";
+import { AuthRequest, AuthResponse, JwtPayload } from "../models/Auth.model";
+import { Router } from "@angular/router";
+import { environment } from "../environments/environment";
+import { tap } from "rxjs";
+import { JwtHelper } from "../shared/Jwt.helper";
+import { Injectable } from "@angular/core";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  private authUrl: string = environment.authUrl;
+  private tokenKey: string = 'auth-token';
+  private payload: JwtPayload | null = null;
+
+  constructor(private http: HttpClient, private router: Router) {
+    this.decodeToken(); // Hay que decodificar el token al iniciarl el servicio
+  }
+
+  login(username: string, password: string) {
+    console.log('Intentando iniciar sesión con:', username, password);
+    let authRequest: AuthRequest = { username, password };
+    return this.http.post<AuthResponse>(this.authUrl, authRequest).pipe(
+      tap((response: AuthResponse | undefined) => {
+        if (response?.token) {
+          localStorage.setItem(this.tokenKey, response.token);
+          this.decodeToken();
+        }
+      })
+    );
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  isLoggedIn(): boolean {
+    const token = this.getToken();
+    return !!token && !JwtHelper.isTokenExpired(token);
+  }
+
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+    this.payload = null;
+    this.router.navigate(['/login']);
+  }
+
+  isAuthenticated(): boolean {
+    return this.isLoggedIn();
+  }
+
+  // ------------------------
+  // Funciones de roles y usuario
+  // ------------------------
+
+  private decodeToken(): void {
+    const token = this.getToken();
+    this.payload = token ? JwtHelper.decodeToken(token) : null;
+  }
+
+  getUsername(): string | null {
+    return this.payload?.sub || null;
+  }
+
+  getRoles(): string[] {
+    const roles = this.payload?.roles ?? this.payload?.authorities ?? [];
+    const values = Array.isArray(roles) ? roles : [roles];
+    return values.map(role => role.toUpperCase().startsWith('ROLE_') ? role.toUpperCase() : `ROLE_${role.toUpperCase()}`);
+  }
+
+  hasRole(role: string): boolean {
+    const normalizedRole = role.toUpperCase().startsWith('ROLE_') ? role.toUpperCase() : `ROLE_${role.toUpperCase()}`;
+    return this.getRoles().includes(normalizedRole);
+  }
+
+  hasAnyRole(roles: string[]): boolean {
+    return roles.some(role => this.hasRole(role));
+  }
+}

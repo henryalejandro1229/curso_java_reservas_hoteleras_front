@@ -1,0 +1,91 @@
+<div class="modal-container">
+  <h2 mat-dialog-title id="modal-reservas-title">
+    {{ data.isEditar ? 'Editar reserva' : 'Nueva reserva' }}
+  </h2>
+
+  <form
+    [formGroup]="reservaForm"
+    (ngSubmit)="guardarCambios()"
+    aria-labelledby="modal-reservas-title"
+    novalidate
+  >
+    <div mat-dialog-content class="form-content">
+      <p class="form-instructions">
+        Selecciona el huésped, la habitación y las fechas de la reserva.
+      </p>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="campo-amplio">
+          <mat-label>Huésped</mat-label>
+          <mat-select formControlName="idHuesped" required>
+            <mat-option *ngFor="let huesped of huespedes" [value]="huesped.id">
+              {{ getNombreHuesped(huesped) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo-amplio">
+          <mat-label>Habitación</mat-label>
+          <mat-select formControlName="idHabitacion" required>
+            <mat-option *ngFor="let habitacion of habitaciones" [value]="habitacion.id">
+              {{ habitacion.nombre }} - {{ habitacion.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de entrada</mat-label>
+          <input
+            matInput
+            [matDatepicker]="pickerEntrada"
+            formControlName="fechaEntrada"
+            required
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="pickerEntrada"></mat-datepicker-toggle>
+          <mat-datepicker #pickerEntrada></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de salida</mat-label>
+          <input
+            matInput
+            [matDatepicker]="pickerSalida"
+            formControlName="fechaSalida"
+            [min]="reservaForm.value.fechaEntrada"
+            required
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="pickerSalida"></mat-datepicker-toggle>
+          <mat-datepicker #pickerSalida></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora de entrada</mat-label>
+          <input matInput type="time" formControlName="horaEntrada" step="60" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora de salida</mat-label>
+          <input matInput type="time" formControlName="horaSalida" step="60" required />
+        </mat-form-field>
+      </div>
+
+      <p class="error-text" *ngIf="fechasInvalidas()" role="alert">
+        La fecha de salida no puede ser anterior a la fecha de entrada.
+      </p>
+    </div>
+
+    <div mat-dialog-actions align="end" class="modal-actions">
+      <button mat-button type="button" (click)="cerrarModal()">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="reservaForm.invalid || fechasInvalidas()"
+      >
+        {{ data.isEditar ? 'Guardar cambios' : 'Registrar reserva' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,16 @@
+.login-page {
+  background-color: #508bfc;
+}
+
+.login-card {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.social-button {
+  height: 48px;
+}
+
+mat-form-field {
+  display: block;
+}

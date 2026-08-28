@@ -1,0 +1,71 @@
+<div class="modal-container">
+  <h2 mat-dialog-title id="modal-huespedes-title">
+    {{ data.isEditar ? 'Editar huésped' : 'Agregar huésped' }}
+  </h2>
+
+  <form
+    [formGroup]="huespedForm"
+    (ngSubmit)="guardarCambios()"
+    aria-labelledby="modal-huespedes-title"
+    novalidate
+  >
+    <div mat-dialog-content class="form-content">
+      <p class="form-instructions">
+        Todos los campos son obligatorios.
+      </p>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="nombre" autocomplete="given-name" required>
+          <mat-error>{{ getErrorMessage('nombre') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Apellido paterno</mat-label>
+          <input matInput formControlName="apellidoPaterno" autocomplete="family-name" required>
+          <mat-error>{{ getErrorMessage('apellidoPaterno') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Apellido materno</mat-label>
+          <input matInput formControlName="apellidoMaterno" required>
+          <mat-error>{{ getErrorMessage('apellidoMaterno') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nacionalidad</mat-label>
+          <input matInput formControlName="nacionalidad" autocomplete="country-name" required>
+          <mat-error>{{ getErrorMessage('nacionalidad') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" autocomplete="email" required>
+          <mat-error>{{ getErrorMessage('email') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input matInput formControlName="telefono" type="tel" maxlength="10" inputmode="numeric" autocomplete="tel" required>
+          <mat-error>{{ getErrorMessage('telefono') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Documento</mat-label>
+          <input matInput formControlName="documento" autocomplete="off" required>
+          <mat-error>{{ getErrorMessage('documento') }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div mat-dialog-actions align="end" class="modal-actions">
+      <button mat-button type="button" (click)="cerrarModal()">
+        Cancelar
+      </button>
+      <button mat-flat-button color="primary" type="submit">
+        {{ data.isEditar ? 'Guardar cambios' : 'Registrar huésped' }}
+      </button>
+    </div>
+  </form>
+</div>

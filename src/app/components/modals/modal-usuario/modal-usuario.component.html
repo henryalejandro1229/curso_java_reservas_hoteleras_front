@@ -1,0 +1,68 @@
+<div class="modal-container">
+  <h2 mat-dialog-title id="modal-usuario-title">
+    {{ data.isEditar ? 'Editar usuario' : 'Agregar usuario' }}
+  </h2>
+
+  <form
+    [formGroup]="usuarioForm"
+    (ngSubmit)="guardarCambios()"
+    aria-labelledby="modal-usuario-title"
+    novalidate
+  >
+    <div mat-dialog-content class="form-content">
+      <p class="form-instructions">Todos los campos son obligatorios.</p>
+
+      @if (mostrarResumenErrores) {
+        <p class="form-error-summary" role="alert">
+          Revisa los campos marcados antes de continuar.
+        </p>
+      }
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Usuario</mat-label>
+          <input
+            matInput
+            formControlName="username"
+            [readonly]="data.isEditar"
+            [value]="data.username"
+            [disabled]="data.isEditar"
+            autocomplete="off"
+            required
+          >
+          <mat-hint>De 5 a 20 caracteres</mat-hint>
+          <mat-error>{{ getErrorMessage('username') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            type="password"
+            autocomplete="new-password"
+            required
+          >
+          <mat-hint>Mínimo 8 caracteres</mat-hint>
+          <mat-error>{{ getErrorMessage('password') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo-amplio">
+          <mat-label>Roles</mat-label>
+          <mat-select formControlName="roles" multiple required>
+            <mat-option value="ROLE_ADMIN">ADMINISTRADOR</mat-option>
+            <mat-option value="ROLE_USER">USUARIO</mat-option>
+          </mat-select>
+          <mat-error>{{ getErrorMessage('roles') }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div mat-dialog-actions align="end" class="modal-actions">
+      <button mat-button type="button" (click)="cerrarModal()">Cancelar</button>
+      <button mat-flat-button color="primary" type="submit">
+        {{ data.isEditar ? 'Guardar cambios' : 'Registrar usuario' }}
+      </button>
+    </div>
+  </form>
+</div>

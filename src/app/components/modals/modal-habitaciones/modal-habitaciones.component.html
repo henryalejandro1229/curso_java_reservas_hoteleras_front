@@ -1,0 +1,98 @@
+<div class="modal-container">
+  <h2 mat-dialog-title id="modal-habitaciones-title">
+    {{ data.isEditar ? 'Editar habitación' : 'Agregar habitación' }}
+  </h2>
+
+  <form
+    [formGroup]="habitacionForm"
+    (ngSubmit)="guardarCambios()"
+    aria-labelledby="modal-habitaciones-title"
+    novalidate
+  >
+    <div mat-dialog-content class="form-content">
+      <p class="form-instructions">
+        Todos los campos son obligatorios.
+      </p>
+
+      @if (mostrarResumenErrores) {
+        <p class="form-error-summary" role="alert">
+          Revisa los campos marcados antes de continuar.
+        </p>
+      }
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Número de habitación</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="numero"
+            min="1"
+            max="32767"
+            step="1"
+            inputmode="numeric"
+            autocomplete="off"
+            required
+          >
+          <mat-hint>De 1 a 32767</mat-hint>
+          <mat-error>{{ getErrorMessage('numero') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de habitación</mat-label>
+          <mat-select formControlName="idTipoHabitacion" required>
+            @for (tipo of tiposHabitacion; track tipo.id) {
+              <mat-option [value]="tipo.id">{{ tipo.nombre }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ getErrorMessage('idTipoHabitacion') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Capacidad</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="capacidad"
+            min="1"
+            max="10"
+            step="1"
+            inputmode="numeric"
+            autocomplete="off"
+            required
+          >
+          <mat-hint>De 1 a 10 personas</mat-hint>
+          <mat-error>{{ getErrorMessage('capacidad') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Precio por noche</mat-label>
+          <span matTextPrefix>$&nbsp;</span>
+          <input
+            matInput
+            type="number"
+            formControlName="precio"
+            min="0.01"
+            max="99999999.99"
+            step="0.01"
+            inputmode="decimal"
+            autocomplete="off"
+            required
+          >
+          <span matTextSuffix>MXN</span>
+          <mat-hint>Máximo 2 decimales</mat-hint>
+          <mat-error>{{ getErrorMessage('precio') }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div mat-dialog-actions align="end" class="modal-actions">
+      <button mat-button type="button" (click)="cerrarModal()">
+        Cancelar
+      </button>
+      <button mat-flat-button color="primary" type="submit">
+        {{ data.isEditar ? 'Guardar cambios' : 'Registrar habitación' }}
+      </button>
+    </div>
+  </form>
+</div>

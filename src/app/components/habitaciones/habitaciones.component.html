@@ -1,0 +1,160 @@
+<section class="habitaciones-page" aria-labelledby="habitaciones-title">
+  <mat-card class="habitaciones-card">
+    <header class="habitaciones-header">
+      <div>
+        <h1 id="habitaciones-title">Habitaciones</h1>
+        <p>{{ puedeAdministrar ? 'Administra' : 'Consulta' }} las habitaciones activas del hotel.</p>
+      </div>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        aria-label="Agregar una habitación"
+        [disabled]="cargando || operacionEnCurso || modalAbierto"
+        *ngIf="puedeAdministrar"
+        (click)="agregarHabitacion()"
+      >
+        <mat-icon aria-hidden="true">add</mat-icon>
+        Agregar habitación
+      </button>
+    </header>
+
+    <div
+      class="tabla-wrapper"
+      [attr.aria-busy]="cargando || operacionEnCurso"
+      aria-live="polite"
+    >
+      @if (operacionEnCurso) {
+        <div class="operacion-status" role="status">
+          Procesando operación…
+        </div>
+      }
+
+      @if (cargando) {
+        <div class="estado-listado" role="status">
+          <mat-progress-bar
+            mode="indeterminate"
+            aria-label="Cargando habitaciones"
+          ></mat-progress-bar>
+          <span>Cargando habitaciones…</span>
+        </div>
+      }
+
+      @if (errorCarga) {
+        <div class="estado-error" role="alert">
+          <span>No se pudieron cargar las habitaciones.</span>
+          <button mat-stroked-button type="button" (click)="reintentarCarga()">
+            Reintentar
+          </button>
+        </div>
+      }
+
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z2 habitaciones-table"
+        aria-label="Listado de habitaciones"
+      >
+          <caption class="solo-lectores">
+            Habitaciones activas ordenadas por número. El estado es informativo.
+          </caption>
+
+          <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef scope="col">No.</th>
+            <td mat-cell *matCellDef="let habitacion; let i = index">
+              {{ i + 1 }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="numero">
+            <th mat-header-cell *matHeaderCellDef scope="col">Número</th>
+            <td mat-cell *matCellDef="let habitacion">
+              {{ habitacion.numero }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef scope="col">Tipo</th>
+            <td mat-cell *matCellDef="let habitacion">
+              {{ habitacion.tipo }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="capacidad">
+            <th mat-header-cell *matHeaderCellDef scope="col">Capacidad</th>
+            <td mat-cell *matCellDef="let habitacion">
+              {{ habitacion.capacidad }}
+              {{ habitacion.capacidad === 1 ? 'persona' : 'personas' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="precio">
+            <th mat-header-cell *matHeaderCellDef scope="col">Precio (MXN)</th>
+            <td mat-cell *matCellDef="let habitacion">
+              {{ habitacion.precio | currency:'MXN':'symbol':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estadoHabitacion">
+            <th mat-header-cell *matHeaderCellDef scope="col">Estado</th>
+            <td mat-cell *matCellDef="let habitacion">
+              <span
+                class="estado-habitacion"
+                [ngClass]="getEstadoClase(habitacion)"
+                title="El estado es informativo en este módulo"
+              >
+                {{ habitacion.estadoHabitacion }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones" stickyEnd>
+            <th mat-header-cell *matHeaderCellDef scope="col">Acciones</th>
+            <td mat-cell *matCellDef="let habitacion">
+              <div class="acciones-habitacion">
+                <button
+                  *ngIf="puedeAdministrar"
+                  mat-icon-button
+                  color="primary"
+                  class="accion-editar"
+                  type="button"
+                  [attr.aria-label]="'Editar habitación ' + habitacion.numero"
+                  [matTooltip]="'Editar habitación ' + habitacion.numero"
+                  [title]="'Editar habitación ' + habitacion.numero"
+                  [disabled]="operacionEnCurso || modalAbierto || !tieneIdValido(habitacion)"
+                  (click)="editarHabitacion(habitacion)"
+                >
+                  <mat-icon aria-hidden="true">edit</mat-icon>
+                </button>
+
+                <button
+                  *ngIf="puedeAdministrar"
+                  mat-icon-button
+                  color="warn"
+                  class="accion-eliminar"
+                  type="button"
+                  [attr.aria-label]="'Eliminar habitación ' + habitacion.numero"
+                  [matTooltip]="'Eliminar habitación ' + habitacion.numero"
+                  [title]="'Eliminar habitación ' + habitacion.numero"
+                  [disabled]="operacionEnCurso || modalAbierto || !tieneIdValido(habitacion)"
+                  (click)="eliminarHabitacion(habitacion)"
+                >
+                  <mat-icon aria-hidden="true">delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row fila-vacia" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No hay habitaciones registradas.
+            </td>
+          </tr>
+      </table>
+    </div>
+  </mat-card>
+</section>
