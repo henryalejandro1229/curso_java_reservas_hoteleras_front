@@ -171,6 +171,19 @@
                   >
                     <mat-icon aria-hidden="true">event_busy</mat-icon>
                   </button>
+                  <button
+                    *ngIf="esAdministrador"
+                    mat-icon-button
+                    color="warn"
+                    class="accion-eliminar"
+                    type="button"
+                    aria-label="Eliminar reserva"
+                    matTooltip="Eliminar reserva"
+                    [disabled]="operacionEnCurso || modalAbierto"
+                    (click)="eliminarReserva(reserva)"
+                  >
+                    <mat-icon aria-hidden="true">delete</mat-icon>
+                  </button>
                 </div>
               </td>
             </ng-container>
