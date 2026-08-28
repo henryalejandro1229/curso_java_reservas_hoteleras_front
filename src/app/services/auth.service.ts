@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    return this.isLoggedIn();
   }
 
   // ------------------------
@@ -65,11 +65,14 @@ export class AuthService {
   }
 
   getRoles(): string[] {
-    return this.payload?.roles || [];
+    const roles = this.payload?.roles ?? this.payload?.authorities ?? [];
+    const values = Array.isArray(roles) ? roles : [roles];
+    return values.map(role => role.toUpperCase().startsWith('ROLE_') ? role.toUpperCase() : `ROLE_${role.toUpperCase()}`);
   }
 
   hasRole(role: string): boolean {
-    return this.getRoles().includes(role);
+    const normalizedRole = role.toUpperCase().startsWith('ROLE_') ? role.toUpperCase() : `ROLE_${role.toUpperCase()}`;
+    return this.getRoles().includes(normalizedRole);
   }
 
   hasAnyRole(roles: string[]): boolean {

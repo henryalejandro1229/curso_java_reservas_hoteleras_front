@@ -176,6 +176,11 @@ export class ReservasComponent implements OnInit {
     return reserva.nombreHabitacion || `Habitación #${reserva.idHabitacion}`;
   }
 
+  puedeEditar(reserva: ReservaResponse): boolean {
+    const estado = this.getCodigoEstado(reserva);
+    return estado === 1 || estado === 2;
+  }
+
   puedeCambiarA(reserva: ReservaResponse, idEstado: number): boolean {
     const estado = this.getCodigoEstado(reserva);
 

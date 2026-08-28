@@ -3,7 +3,7 @@
     <header class="habitaciones-header">
       <div>
         <h1 id="habitaciones-title">Habitaciones</h1>
-        <p>Administra las habitaciones activas del hotel.</p>
+        <p>{{ puedeAdministrar ? 'Administra' : 'Consulta' }} las habitaciones activas del hotel.</p>
       </div>
 
       <button
@@ -12,6 +12,7 @@
         type="button"
         aria-label="Agregar una habitación"
         [disabled]="cargando || operacionEnCurso || modalAbierto"
+        *ngIf="puedeAdministrar"
         (click)="agregarHabitacion()"
       >
         <mat-icon aria-hidden="true">add</mat-icon>
@@ -113,6 +114,7 @@
             <td mat-cell *matCellDef="let habitacion">
               <div class="acciones-habitacion">
                 <button
+                  *ngIf="puedeAdministrar"
                   mat-icon-button
                   color="primary"
                   class="accion-editar"
@@ -127,6 +129,7 @@
                 </button>
 
                 <button
+                  *ngIf="puedeAdministrar"
                   mat-icon-button
                   color="warn"
                   class="accion-eliminar"

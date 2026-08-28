@@ -2,9 +2,12 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Injectable } from "@angular/core";
 import { catchError, Observable, throwError } from "rxjs";
 import Swal from "sweetalert2";
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+    constructor(private readonly authService: AuthService) {}
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             catchError((err: HttpErrorResponse) => {
@@ -26,17 +29,20 @@ export class ErrorInterceptor implements HttpInterceptor {
                             });
                             break;
                         case 401:
+                            if (!req.url.includes('login')) {
+                                this.authService.logout();
+                            }
                             Swal.fire({
                                 icon: 'warning',
                                 title: 'No autenticado',
-                                text: 'Tu sesión ha expirado o no estás autenticado, inicia sesión nuevamente.'
+                                text: 'Tu sesión ha expirado o no estás autenticado. Inicia sesión nuevamente.'
                             });
                             break;
                         case 403:
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Acceso denegado',
-                                text: 'No tienes permisos para realizar esta acción.'
+                                text: mensaje || 'No tienes permisos para realizar esta acción.'
                             });
                             break;
                         case 404:

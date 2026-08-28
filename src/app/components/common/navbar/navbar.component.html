@@ -21,7 +21,7 @@
             >Huespedes</a
           >
         </li>
-        <li class="nav-item" *ngIf="showMenuAdmin">
+        <li class="nav-item">
           <a
             class="nav-link"
             routerLink="/dashboard/habitaciones"
@@ -37,7 +37,7 @@
             >Reservas</a
           >
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="showMenuAdmin">
           <a
             class="nav-link"
             routerLink="/dashboard/usuarios"
