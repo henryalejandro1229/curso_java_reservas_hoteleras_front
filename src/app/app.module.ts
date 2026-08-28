@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +28,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { HuepedesComponent } from './components/huepedes/huepedes.component';
 import { ModalHuespedesComponent } from './components/modals/modal-huespedes/modal-huespedes.component';
+import { HabitacionesComponent } from './components/habitaciones/habitaciones.component';
+import { ModalHabitacionesComponent } from './components/modals/modal-habitaciones/modal-habitaciones.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,9 @@ import { ModalHuespedesComponent } from './components/modals/modal-huespedes/mod
     UsuariosComponent,
     ModalUsuarioComponent,
     HuepedesComponent,
-    ModalHuespedesComponent
+    ModalHuespedesComponent,
+    HabitacionesComponent,
+    ModalHabitacionesComponent
   ],
   imports: [
     HttpClientModule,
@@ -49,6 +54,7 @@ import { ModalHuespedesComponent } from './components/modals/modal-huespedes/mod
     MatTableModule,
     MatButtonModule,
     MatIconModule,
+    MatProgressBarModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
