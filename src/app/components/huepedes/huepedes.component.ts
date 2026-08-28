@@ -89,9 +89,7 @@ export class HuepedesComponent implements OnInit {
             );
             Swal.fire('Eliminado', `El huésped ${nombreCompleto} fue eliminado.`, 'success');
           },
-          error: () => {
-            Swal.fire('Error', 'No se pudo eliminar el huésped.', 'error');
-          }
+          error: () => undefined
         });
       }
     });
@@ -118,9 +116,7 @@ export class HuepedesComponent implements OnInit {
         this.cargarHuespedes();
         Swal.fire('Huésped registrado', 'El huésped se creó correctamente.', 'success');
       },
-      error: () => {
-        Swal.fire('Error', 'No se pudo registrar el huésped.', 'error');
-      }
+      error: () => undefined
     });
   }
 
@@ -130,9 +126,7 @@ export class HuepedesComponent implements OnInit {
         this.cargarHuespedes();
         Swal.fire('Huésped actualizado', 'Los cambios se guardaron correctamente.', 'success');
       },
-      error: () => {
-        Swal.fire('Error', 'No se pudo actualizar el huésped.', 'error');
-      }
+      error: () => undefined
     });
   }
 

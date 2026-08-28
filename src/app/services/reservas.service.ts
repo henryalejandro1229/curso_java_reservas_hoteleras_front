@@ -45,6 +45,18 @@ export class ReservasService {
     );
   }
 
+  actualizarEstadoReserva(reservaId: string, idEstadoReserva: number): Observable<ReservaResponse> {
+    return this.http.put<ReservaResponse>(
+      `${this.apiUrl}/${reservaId}/estado/${idEstadoReserva}`,
+      {}
+    ).pipe(
+      catchError(error => {
+        console.error('Error al actualizar el estado de la reserva', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   deleteReserva(reservaId: string): Observable<ReservaResponse> {
     return this.http.delete<ReservaResponse>(`${this.apiUrl}/${reservaId}`).pipe(
       catchError(error => {
