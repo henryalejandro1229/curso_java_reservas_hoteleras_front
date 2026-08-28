@@ -1,0 +1,32 @@
+.usuarios-page {
+  padding: 24px;
+}
+
+.usuarios-card {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.usuarios-header {
+  margin-bottom: 24px;
+}
+
+.usuarios-header h2 {
+  margin: 0 0 4px;
+}
+
+.tabla-wrapper {
+  overflow-x: auto;
+}
+
+.usuarios-table {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .usuarios-page,
+  .usuarios-card {
+    padding: 16px;
+  }
+}
