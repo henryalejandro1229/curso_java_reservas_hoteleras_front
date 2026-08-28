@@ -7,6 +7,7 @@ import { HuepedesComponent } from './components/huepedes/huepedes.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ADMIN } from './constants/Roles';
 import { HabitacionesComponent } from './components/habitaciones/habitaciones.component';
+import { ReservasComponent } from './components/reservas/reservas.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -37,6 +38,12 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { roles: [ADMIN] }
       },
+      {
+        path: 'reservas',
+        component: ReservasComponent,
+        canActivate: [AuthGuard],
+        data: { roles: [ADMIN] }
+      }
     ],
   },
   {

@@ -26,6 +26,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { MatChipsModule } from '@angular/material/chips';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { ReservasComponent } from './components/reservas/reservas.component';
+import { ModalReservasComponent } from './components/modals/modal-reservas/modal-reservas.component';
 import { HuepedesComponent } from './components/huepedes/huepedes.component';
 import { ModalHuespedesComponent } from './components/modals/modal-huespedes/modal-huespedes.component';
 import { HabitacionesComponent } from './components/habitaciones/habitaciones.component';
@@ -39,6 +41,9 @@ import { ModalHabitacionesComponent } from './components/modals/modal-habitacion
     FooterComponent,
     NavbarComponent,
     UsuariosComponent,
+    ModalUsuarioComponent,
+    ReservasComponent,
+    ModalReservasComponent,
     ModalUsuarioComponent,
     HuepedesComponent,
     ModalHuespedesComponent,

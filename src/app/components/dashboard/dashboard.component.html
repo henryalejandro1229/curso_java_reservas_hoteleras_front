@@ -1,6 +1,43 @@
 <div class="app-container">
     <app-navbar></app-navbar>
     <main>
+        <section
+            *ngIf="esDashboardPrincipal"
+            class="dashboard-content"
+            aria-labelledby="dashboard-title"
+        >
+            <header class="dashboard-header">
+                <div>
+                    <p class="dashboard-eyebrow">Panel principal</p>
+                    <h1 id="dashboard-title">Accesos rápidos</h1>
+                    <p class="dashboard-description">Selecciona un módulo para comenzar.</p>
+                </div>
+            </header>
+
+            <div class="access-grid">
+                <mat-card class="access-card" *ngFor="let acceso of accesosDisponibles">
+                    <mat-card-header>
+                        <div mat-card-avatar class="access-icon">
+                            <mat-icon aria-hidden="true">{{ acceso.icono }}</mat-icon>
+                        </div>
+                        <mat-card-title>{{ acceso.titulo }}</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p>{{ acceso.descripcion }}</p>
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <a mat-flat-button color="primary" [routerLink]="acceso.ruta">
+                            Abrir módulo
+                            <mat-icon iconPositionEnd aria-hidden="true">arrow_forward</mat-icon>
+                        </a>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+
+            <p class="no-access" *ngIf="accesosDisponibles.length === 0">
+                No tienes módulos disponibles para tu rol.
+            </p>
+        </section>
         <router-outlet/>
     </main>
     <app-footer></app-footer>

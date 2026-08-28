@@ -34,6 +34,10 @@ mat-form-field {
   width: 100%;
 }
 
+.campo-amplio {
+  grid-column: 1 / -1;
+}
+
 .modal-actions {
   box-sizing: border-box;
   display: flex;
@@ -43,6 +47,11 @@ mat-form-field {
   padding: 12px 24px 20px;
 }
 
+.error-text {
+  margin: 0 0 4px;
+  color: #b3261e;
+}
+
 @media (max-width: 600px) {
   .modal-container {
     width: calc(100vw - 24px);
@@ -50,6 +59,10 @@ mat-form-field {
 
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .campo-amplio {
+    grid-column: auto;
   }
 
   .modal-actions {
