@@ -5,6 +5,7 @@ import { UsuarioRequest, UsuarioResponse } from '../../models/Usuario.model';
 import Swal from 'sweetalert2';
 import { ModalUsuarioComponent } from '../modals/modal-usuario/modal-usuario.component';
 import { UsuariosService } from '../../services/usuarios.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-usuarios',
@@ -15,6 +16,7 @@ import { UsuariosService } from '../../services/usuarios.service';
 export class UsuariosComponent implements OnInit {
 
   usuarios: UsuarioResponse[] = [];
+  cargando = false;
 
   constructor(
     private dialog: MatDialog, private usuariosService: UsuariosService
@@ -83,10 +85,15 @@ export class UsuariosComponent implements OnInit {
   }
 
   private cargarUsuarios(): void {
-    this.usuariosService.getUsuarios().subscribe(usuarios => {
-      this.usuarios = usuarios;
-      this.dataSource.data = usuarios;
-    });
+    this.cargando = true;
+    this.usuariosService.getUsuarios()
+      .pipe(finalize(() => {
+        this.cargando = false;
+      }))
+      .subscribe(usuarios => {
+        this.usuarios = usuarios;
+        this.dataSource.data = usuarios;
+      });
   }
 
   private crearUsuario(usuario: UsuarioRequest): void {

@@ -20,6 +20,10 @@
   overflow-x: auto;
 }
 
+.tabla-loader {
+  width: 100%;
+}
+
 .usuarios-table {
   width: 100%;
 }
