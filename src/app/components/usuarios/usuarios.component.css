@@ -51,10 +51,6 @@
   color: #c62828;
 }
 
-button:not(:disabled):hover {
-  background-color: color-mix(in srgb, currentColor 12%, transparent);
-}
-
 .fila-vacia td {
   padding: 32px 16px;
   color: #5f6368;

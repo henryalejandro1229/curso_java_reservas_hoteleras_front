@@ -10,5 +10,6 @@ export interface AuthResponse {
 export interface JwtPayload {
     sub: string;
     exp: number;
-    roles: string[];
+    roles?: string[] | string;
+    authorities?: string[] | string;
 }

@@ -1,2 +1,7 @@
-export const ADMIN = 'ROLE_ADMIN';
-export const USER = 'ROLE_USER';
+export enum Role {
+	ADMIN = 'ROLE_ADMIN',
+	USER = 'ROLE_USER'
+}
+
+export const ADMIN = Role.ADMIN;
+export const USER = Role.USER;

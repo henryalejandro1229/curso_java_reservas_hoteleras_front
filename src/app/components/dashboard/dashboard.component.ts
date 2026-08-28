@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ADMIN } from '../../constants/Roles';
-import { AuthService } from '../../services/auth.service';
+import { ADMIN, USER } from '../../constants/Roles';
+import { RoleService } from '../../services/role.service';
 
 interface AccesoRapido {
   titulo: string;
@@ -26,21 +26,21 @@ export class DashboardComponent {
       descripcion: 'Administra la información de los huéspedes.',
       icono: 'groups',
       ruta: '/dashboard/huespedes',
-      roles: [ADMIN]
+      roles: [ADMIN, USER]
     },
     {
       titulo: 'Habitaciones',
       descripcion: 'Consulta y administra las habitaciones.',
       icono: 'hotel',
       ruta: '/dashboard/habitaciones',
-      roles: [ADMIN]
+      roles: [ADMIN, USER]
     },
     {
       titulo: 'Reservas',
       descripcion: 'Gestiona las reservas del hotel.',
       icono: 'calendar_month',
       ruta: '/dashboard/reservas',
-      roles: [ADMIN]
+      roles: [ADMIN, USER]
     },
     {
       titulo: 'Usuarios',
@@ -52,11 +52,11 @@ export class DashboardComponent {
   ];
 
   constructor(
-    private readonly authService: AuthService,
+    private readonly roleService: RoleService,
     private readonly router: Router
   ) {
     this.accesosDisponibles = this.accesos.filter(acceso =>
-      this.authService.hasAnyRole(acceso.roles)
+      this.roleService.hasAnyRole(acceso.roles)
     );
   }
 

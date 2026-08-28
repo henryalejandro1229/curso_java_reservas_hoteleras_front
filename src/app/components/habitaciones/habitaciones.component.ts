@@ -9,6 +9,7 @@ import {
 } from '../../models/Habitacion.model';
 import { HabitacionesService } from '../../services/habitaciones.service';
 import { ModalHabitacionesComponent } from '../modals/modal-habitaciones/modal-habitaciones.component';
+import { RoleService } from '../../services/role.service';
 import {
   CLASES_ESTADO_HABITACION,
   CLASE_ESTADO_HABITACION_DESCONOCIDO
@@ -44,8 +45,13 @@ export class HabitacionesComponent implements OnInit {
 
   constructor(
     private readonly dialog: MatDialog,
-    private readonly habitacionesService: HabitacionesService
+    private readonly habitacionesService: HabitacionesService,
+    private readonly roleService: RoleService
   ) { }
+
+  get puedeAdministrar(): boolean {
+    return this.roleService.isAdmin();
+  }
 
   ngOnInit(): void {
     this.cargarHabitaciones();

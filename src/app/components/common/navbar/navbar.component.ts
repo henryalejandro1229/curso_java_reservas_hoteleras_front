@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { ADMIN } from '../../../constants/Roles';
 import Swal from 'sweetalert2';
 import { showNotifySuccess } from '../../../shared/functions/Utilities';
+import { RoleService } from '../../../services/role.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,15 +12,14 @@ import { showNotifySuccess } from '../../../shared/functions/Utilities';
 })
 export class NavbarComponent {
   username: string | null = null;
-  showMenuAdmin: boolean = false;
+  readonly showMenuAdmin: boolean;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private roleService: RoleService) {
+    this.showMenuAdmin = this.roleService.isAdmin();
+  }
 
   ngOnInit(): void {
     this.username = this.authService.getUsername();
-    if (this.authService.hasRole(ADMIN)) {
-      this.showMenuAdmin = true;
-    }
   }
 
   logout(): void {
