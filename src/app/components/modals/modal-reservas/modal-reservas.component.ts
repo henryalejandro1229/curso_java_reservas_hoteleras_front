@@ -28,8 +28,8 @@ export class ModalReservasComponent implements OnInit {
     }
   ) {
     this.reservaForm = new FormGroup({
-      idHuesped: new FormControl<number | null>(this.data.reserva?.idHuesped ?? null, [Validators.required]),
-      idHabitacion: new FormControl<number | null>(this.data.reserva?.idHabitacion ?? null, [Validators.required]),
+      idHuesped: new FormControl<number | null>(this.getIdHuesped(), [Validators.required]),
+      idHabitacion: new FormControl<number | null>(this.getIdHabitacion(), [Validators.required]),
       fechaEntrada: new FormControl<Date | null>(this.parseFecha(this.data.reserva?.fechaEntrada), [Validators.required]),
       fechaSalida: new FormControl<Date | null>(this.parseFecha(this.data.reserva?.fechaSalida), [Validators.required]),
       horaEntrada: new FormControl(this.parseHora(this.data.reserva?.fechaEntrada), [Validators.required]),
@@ -69,8 +69,12 @@ export class ModalReservasComponent implements OnInit {
   }
 
   private cargarHabitaciones(): void {
-    this.reservasService.getHabitaciones().subscribe(habitaciones => {
-      this.habitaciones = habitaciones;
+    this.reservasService.getHabitaciones(true).subscribe(habitacionesDisponibles => {
+      const habitacionActual = this.getHabitacionActual();
+      this.habitaciones = habitacionActual &&
+        !habitacionesDisponibles.some(habitacion => habitacion.id === habitacionActual.id)
+        ? [habitacionActual, ...habitacionesDisponibles]
+        : habitacionesDisponibles;
     });
   }
 
@@ -89,6 +93,33 @@ export class ModalReservasComponent implements OnInit {
 
   getNombreHuesped(huesped: HuespedResponse): string {
     return `${huesped.nombre} ${huesped.apellidoPaterno} ${huesped.apellidoMaterno}`.trim();
+  }
+
+  private getIdHuesped(): number | null {
+    const id = this.data.reserva?.idHuesped ?? this.data.reserva?.huesped?.id;
+    return id === undefined ? null : Number(id);
+  }
+
+  private getIdHabitacion(): number | null {
+    const id = this.data.reserva?.idHabitacion ?? this.data.reserva?.habitacion?.id;
+    return id === undefined ? null : Number(id);
+  }
+
+  private getHabitacionActual(): HabitacionOption | null {
+    const id = this.getIdHabitacion();
+    if (id === null || Number.isNaN(id)) {
+      return null;
+    }
+
+    const habitacion = this.data.reserva?.habitacion;
+    const numero = habitacion?.numero ?? this.data.reserva?.numeroHabitacion ?? id;
+    const tipo = habitacion?.tipo ?? habitacion?.nombre ?? '';
+
+    return {
+      id,
+      nombre: `Habitacion ${numero}`,
+      descripcion: tipo
+    };
   }
 
   private parseFecha(fecha: string | undefined): Date | null {

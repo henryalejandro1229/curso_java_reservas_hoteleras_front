@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
 import { HabitacionOption, ReservaRequest, ReservaResponse } from '../models/Reservas.model';
@@ -66,8 +66,10 @@ export class ReservasService {
     );
   }
 
-  getHabitaciones(): Observable<HabitacionOption[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/habitaciones`).pipe(
+  getHabitaciones(disponibles?: boolean): Observable<HabitacionOption[]> {
+    const params = disponibles ? new HttpParams().set('disponibles', 'true') : undefined;
+
+    return this.http.get<any[]>(`${environment.apiUrl}/habitaciones`, { params }).pipe(
       map(habitaciones => habitaciones.map(habitacion => this.mapHabitacion(habitacion))),
       catchError(error => {
         console.error('Error al obtener las habitaciones', error);

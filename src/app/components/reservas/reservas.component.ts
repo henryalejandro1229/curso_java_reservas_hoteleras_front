@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { ModalReservasComponent } from '../modals/modal-reservas/modal-reservas.component';
 import { ReservaRequest, ReservaResponse } from '../../models/Reservas.model';
 import { ReservasService } from '../../services/reservas.service';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-reservas',
@@ -16,6 +17,7 @@ import { ReservasService } from '../../services/reservas.service';
 export class ReservasComponent implements OnInit {
 
   filtro = '';
+  readonly esAdministrador: boolean;
   cargando = false;
   errorCarga = false;
   operacionEnCurso = false;
@@ -34,8 +36,11 @@ export class ReservasComponent implements OnInit {
 
   constructor(
     private readonly dialog: MatDialog,
-    private readonly reservasService: ReservasService
-  ) { }
+    private readonly reservasService: ReservasService,
+    private readonly roleService: RoleService
+  ) {
+    this.esAdministrador = this.roleService.isAdmin();
+  }
 
   ngOnInit(): void {
     this.cargarReservas();

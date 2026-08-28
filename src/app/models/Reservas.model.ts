@@ -6,6 +6,8 @@ export interface ReservaRequest {
 }
 
 export interface ReservaResponse extends ReservaRequest {
+  idHuesped: number;
+  idHabitacion: number;
   id?: number;
   idReserva?: number;
   estadoReserva?: string;
